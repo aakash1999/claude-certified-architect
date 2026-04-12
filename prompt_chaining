@@ -1,0 +1,23 @@
+# Step 1: Per-file review — focused scope per changed file
+file_reviews = []
+for file in changed_files:
+    review = claude(
+        prompt=f"Review {file} for: correctness, edge cases, style violations",
+        context=read_file(file)
+    )
+    file_reviews.append(review)
+
+# Step 2: Cross-file integration — look at how changes interact
+integration_issues = claude(
+    prompt="Given these per-file reviews, identify cross-cutting concerns",
+    context="\n".join(file_reviews)  # ← output of Step 1
+)
+
+# Step 3: Final summary — severity-ranked report
+final_report = claude(
+    prompt="Generate a PR review summary, rank issues by severity",
+    context=integration_issues  # ← output of Step 2
+)
+
+
+handoff_prompt: "Before escala";
