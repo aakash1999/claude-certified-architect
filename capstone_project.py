@@ -275,6 +275,109 @@ TOOLS = [
 
 
 # ─────────────────────────────────────────────
+# TOOL CALL HANDLER
+# Centralizes pre-hook, dispatch, post-hook, and structured error handling.
+# Each error category carries enough metadata for the coordinator to decide:
+#   transient  → retry after delay (infra hiccup, safe to re-attempt)
+#   permission → escalate; retrying won't help
+#   validation → model should correct its params before retrying
+#   internal   → unexpected; surface to coordinator / human
+# ─────────────────────────────────────────────
+
+def handle_tool_call(tool_name: str, tool_id: str, tool_input: dict) -> dict:
+    """
+    Execute one tool call end-to-end and return a tool_result dict.
+    Runs pre-tool hooks (policy gate), the tool itself, and post-tool hooks.
+    All errors become structured tool_result responses — never bare exceptions.
+    """
+    # ── PreToolUse: policy gate ───────────────────────────────────────────
+    decision = apply_pre_tool_hooks(tool_name, tool_input)
+    if not decision["allowed"]:
+        print(f"  [HOOK] BLOCKED {tool_name}({tool_input})")
+        print(f"  [HOOK] Reason: {decision['reason']}")
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "is_error":    True,
+            "content":     json.dumps(decision),
+        }
+
+    print(f"  [TOOL] Calling {tool_name}({tool_input})")
+
+    try:
+        raw_result = TOOL_REGISTRY[tool_name](**tool_input)
+        print(f"  [TOOL] Raw result:        {raw_result}")
+
+        # ── PostToolUse: reshape raw data before the model sees it ────────
+        result = apply_post_tool_hooks(tool_name, raw_result)
+        if result is not raw_result:
+            print(f"  [HOOK] Normalized result: {result}")
+
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "content":     json.dumps(result),
+        }
+
+    except TimeoutError as e:
+        # ⚠️  Transient — infrastructure hiccup; safe to retry after a delay
+        print(f"  [TOOL] ERROR: TimeoutError on {tool_name}")
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "is_error":    True,
+            "content":     json.dumps({
+                "errorCategory": "transient",
+                "isRetryable":   True,
+                "description":   f"Timeout calling {tool_name}: {str(e)}",
+                "retryAfterMs":  2000,
+            }),
+        }
+
+    except PermissionError as e:
+        # 🔒 Permission — agent lacks access; retrying won't help; escalate
+        print(f"  [TOOL] ERROR: PermissionError on {tool_name}")
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "is_error":    True,
+            "content":     json.dumps({
+                "errorCategory": "permission",
+                "isRetryable":   False,
+                "description":   f"Access denied for {tool_name}: {str(e)}",
+            }),
+        }
+
+    except ValueError as e:
+        # ❌ Validation — bad input params; model should self-correct, not retry
+        print(f"  [TOOL] ERROR: ValueError on {tool_name}")
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "is_error":    True,
+            "content":     json.dumps({
+                "errorCategory": "validation",
+                "isRetryable":   False,
+                "description":   f"Invalid input for {tool_name}: {str(e)}",
+            }),
+        }
+
+    except Exception as e:
+        # 💥 Internal — unexpected; log and surface to coordinator
+        print(f"  [TOOL] ERROR: {type(e).__name__} on {tool_name}")
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "is_error":    True,
+            "content":     json.dumps({
+                "errorCategory": "internal",
+                "isRetryable":   False,
+                "description":   f"Unexpected error in {tool_name}: {str(e)}",
+            }),
+        }
+
+
+# ─────────────────────────────────────────────
 # EP 01 — AGENTIC LOOP
 # The core loop: send → check stop_reason → run tools → repeat
 # ─────────────────────────────────────────────
@@ -313,45 +416,11 @@ def run_agentic_loop(system_prompt: str, user_message: str, tools: list) -> str:
             # Step 1: append the FULL assistant message first (Ep 01 rule)
             messages.append({"role": "assistant", "content": response.content})
 
-            # Step 2: collect tool results
+            # Step 2: collect tool results — handle_tool_call owns all error logic
             tool_results = []
             for block in response.content:
                 if block.type == "tool_use":
-
-                    # ── PreToolUse hook ───────────────────────────────
-                    # Policy gate: decide whether the tool is allowed to run
-                    # AT ALL. If blocked, we never touch the tool — we just
-                    # hand the model a structured "blocked" result so it can
-                    # explain the situation or escalate.
-                    decision = apply_pre_tool_hooks(block.name, block.input)
-                    if not decision["allowed"]:
-                        print(f"  [HOOK] BLOCKED {block.name}({block.input})")
-                        print(f"  [HOOK] Reason: {decision['reason']}")
-                        tool_results.append({
-                            "type":        "tool_result",
-                            "tool_use_id": block.id,
-                            "is_error":    True,
-                            "content":     json.dumps(decision),
-                        })
-                        continue   # skip the real tool call
-
-                    print(f"  [TOOL] Calling {block.name}({block.input})")
-                    raw_result = TOOL_REGISTRY[block.name](**block.input)
-                    print(f"  [TOOL] Raw result:        {raw_result}")
-
-                    # ── PostToolUse hook ──────────────────────────────
-                    # Reshape raw data into a model-friendly form BEFORE
-                    # the model ever sees it. Deterministic work belongs
-                    # in code, not in the LLM.
-                    result = apply_post_tool_hooks(block.name, raw_result)
-                    if result is not raw_result:
-                        print(f"  [HOOK] Normalized result: {result}")
-
-                    tool_results.append({
-                        "type":        "tool_result",
-                        "tool_use_id": block.id,       # must match exactly (Ep 01)
-                        "content":     json.dumps(result)
-                    })
+                    tool_results.append(handle_tool_call(block.name, block.id, block.input))
 
             # Step 3: append tool results as a user message
             messages.append({"role": "user", "content": tool_results})

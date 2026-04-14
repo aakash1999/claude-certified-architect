@@ -71,6 +71,84 @@ def execute_tool(tool_name: str, tool_input: dict) -> str:
     return json.dumps({"error": f"Unknown tool: {tool_name}"})
 
 
+def handle_tool_call(tool_name: str, tool_id: str, tool_input: dict) -> dict:
+    """
+    Execute one tool call and return a complete tool_result dict.
+    Structured error categories let Claude decide: retry, self-correct, or escalate.
+      transient  → infrastructure hiccup; retryable after a delay
+      permission → access denied; escalate, don't retry
+      validation → bad params; model should self-correct before retrying
+      internal   → unexpected; surface to coordinator / human
+    """
+    print(f"  → Calling tool: {tool_name}({tool_input})")
+
+    try:
+        content = execute_tool(tool_name, tool_input)
+        print(f"  ← Result: {content}")
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "content":     content,
+        }
+
+    except TimeoutError as e:
+        # ⚠️  Transient — infrastructure hiccup; safe to retry after a delay
+        print(f"  ← ERROR: TimeoutError on {tool_name}")
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "is_error":    True,
+            "content":     json.dumps({
+                "errorCategory": "transient",
+                "isRetryable":   True,
+                "description":   f"Timeout calling {tool_name}: {str(e)}",
+                "retryAfterMs":  2000,
+            }),
+        }
+
+    except PermissionError as e:
+        # 🔒 Permission — agent lacks access; retrying won't help; escalate
+        print(f"  ← ERROR: PermissionError on {tool_name}")
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "is_error":    True,
+            "content":     json.dumps({
+                "errorCategory": "permission",
+                "isRetryable":   False,
+                "description":   f"Access denied for {tool_name}: {str(e)}",
+            }),
+        }
+
+    except ValueError as e:
+        # ❌ Validation — bad input params; model should self-correct, not retry
+        print(f"  ← ERROR: ValueError on {tool_name}")
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "is_error":    True,
+            "content":     json.dumps({
+                "errorCategory": "validation",
+                "isRetryable":   False,
+                "description":   f"Invalid input for {tool_name}: {str(e)}",
+            }),
+        }
+
+    except Exception as e:
+        # 💥 Internal — unexpected; log and surface to coordinator
+        print(f"  ← ERROR: {type(e).__name__} on {tool_name}")
+        return {
+            "type":        "tool_result",
+            "tool_use_id": tool_id,
+            "is_error":    True,
+            "content":     json.dumps({
+                "errorCategory": "internal",
+                "isRetryable":   False,
+                "description":   f"Unexpected error in {tool_name}: {str(e)}",
+            }),
+        }
+
+
 # ─────────────────────────────────────────────────────────────
 # STEP 5: The agentic loop
 # ─────────────────────────────────────────────────────────────
@@ -129,19 +207,11 @@ def run_agent(user_message: str) -> str:
                 "content": response.content   # contains the tool_use blocks
             })
 
-            # Execute each tool Claude requested
+            # Execute each tool — handle_tool_call owns all error handling
             tool_results = []
             for block in response.content:
                 if block.type == "tool_use":
-                    print(f"  → Calling tool: {block.name}({block.input})")
-                    result = execute_tool(block.name, block.input)
-                    print(f"  ← Result: {result}")
-
-                    tool_results.append({
-                        "type": "tool_result",
-                        "tool_use_id": block.id,  # ← MUST match the id in the assistant msg
-                        "content": result
-                    })
+                    tool_results.append(handle_tool_call(block.name, block.id, block.input))
 
             # APPEND 2: The tool results (role: "user")
             # "user" role because this is data COMING INTO Claude from your code.
