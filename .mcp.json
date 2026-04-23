@@ -1,0 +1,37 @@
+{
+  "mcpServers": {
+
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/workspace"],
+      "resources": [
+        { "uri": "file:///workspace/src",  "name": "Source code root" },
+        { "uri": "file:///workspace/docs", "name": "Project documentation" }
+      ]
+    },
+
+    "github": {
+      "type": "http",
+      "url": "https://api.github.com/mcp",
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+
+    "semantic-search": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./tools/semantic-search-server.js"],
+      "env": {
+        "VECTOR_DB_URL": "${VECTOR_DB_URL}"
+      },
+      "toolOverrides": {
+        "search_code": {
+          "description": "Vector semantic search. USE INSTEAD of Grep when the query describes intent or concept — e.g., 'find error handling patterns' or 'locate authentication logic'. Returns top 5 files with context. For literal string matches, use Grep."
+        }
+      }
+    }
+
+  }
+}
