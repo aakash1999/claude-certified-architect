@@ -1,0 +1,46 @@
+{
+  "status": "error",
+  "message": "Operation failed"
+}
+
+{
+  "errorCategory": "timeout",
+  "isRetryable": true,
+  "attemptedQuery": "Q3 revenue",
+  "alternatives": ["sec_filings_db"]
+}
+
+# Web search subagent fails during competitive analysis
+# ✅ Return this to the coordinator — not a bare exception
+
+return {
+  "isError":        True,                     # MCP standard flag
+  "errorCategory":  "timeout",               # what type?
+  "isRetryable":    True,                     # retry signal
+  "attemptedQuery": "Q3 revenue trends 2024", # what we tried
+  "partialResults": ["doc_a", "doc_b"],        # what we got
+  "alternatives":   ["sec_filings_db",         # other options
+                       "internal_reports_db"],
+  "description":    "Web search timed out after 30s"
+}
+
+# ❌ WRONG — swallowing the error silently
+except Exception:
+    return {"results": [], "status": "ok"}
+# Coordinator thinks it worked. It didn't.
+
+# ❌ WRONG — nuking the whole pipeline on one failure
+raise Exception("Search failed. Aborting all agents.")
+# 4 hours of parallel subagent work, gone.
+
+
+# .claude/session_manifest.json — updated before each major step
+{
+  "session_id":       "codebase_audit_jan2025",
+  "status":           "in_progress",
+  "completed_phases": ["auth_module", "payment_module"],
+  "current_phase":    "checkout_module",
+  "files_analyzed":   47,
+  "findings_file":    ".claude/scratchpad.md",
+  "next_step":        "Read src/checkout/flow.ts"
+}

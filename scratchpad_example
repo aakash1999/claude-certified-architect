@@ -1,0 +1,16 @@
+# .claude/scratchpad.md — Claude Code writes this as it explores
+# You instruct it to do this — it's not automatic by default
+
+## Key Findings
+- AuthService: JWT validation lives in /src/auth/jwt.ts line 42
+- PaymentService: calls Stripe API, no retry logic — potential bug
+- Database: PostgreSQL, connection pool = 5 (too low for production)
+- Tests: missing coverage for all error paths in checkout flow
+
+## Files Analyzed
+✅ src/auth/jwt.ts
+✅ src/payments/stripe.ts
+⬜ src/checkout/flow.ts   (not yet read)
+
+## Open Questions
+- Why does AuthService import from PaymentService?

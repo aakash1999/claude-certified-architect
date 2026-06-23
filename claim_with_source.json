@@ -1,0 +1,29 @@
+{
+  "claim": "Adoption rates increased 47% year-over-year",
+  "source": {
+    "document": "McKinsey_AI_Adoption_Report_2024.pdf",
+    "page":     23,
+    "section":  "Enterprise Adoption Trends",
+    "publication_date": "2024-03-15",  // When was this written?
+    "collection_date":  "2024-11-01"   // When did we retrieve it?
+  },
+  "confidence": 0.94
+}
+
+{
+  "field": "market_size_2024",
+  "conflicting_values": [
+    {
+      "value":       "$12B",
+      "source":      "Gartner_Market_Report_Q1_2024.pdf",
+      "methodology": "total addressable market"
+    },
+    {
+      "value":       "$18B",
+      "source":      "IDC_Global_Analysis_2024.pdf",
+      "methodology": "serviceable obtainable market"
+    }
+  ],
+  "resolution": "pending_coordinator_review"
+}
+
