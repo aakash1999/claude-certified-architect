@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCAR-F Practice Mock · Set 01 · Block 1 — Customer Support Resolution Agent</title>
+<style>
+:root{--ink:#1a2030;--mut:#5b6478;--line:#e3e7ef;--card:#fff;--bg:#f4f6fa;--ok:#0c7a43;--okbg:#e6f6ec;--no:#b3261e;--nobg:#fbeae9;--pick:#1f5eff;--pickbg:#eaf0ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding-bottom:56px}
+.wrap{max-width:780px;margin:0 auto;padding:20px 16px}
+header{padding:26px 0 10px}
+.kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:700}
+h1{font-size:26px;margin:6px 0 4px}
+.sub{color:var(--mut);font-size:15px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0;font-size:14.5px}
+.brief h2{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+.scorebar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;font-weight:600;flex-wrap:wrap}
+.load{font-size:12px;color:var(--mut);font-weight:700}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:18px 0}
+.qnum{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);font-weight:700;margin-bottom:8px}
+.stem{font-size:16px;margin-bottom:14px}
+.opt{display:block;width:100%;text-align:left;background:#fbfcfe;border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;margin:8px 0;font-size:15px;cursor:pointer;transition:.12s;font-family:inherit;color:var(--ink)}
+.opt:hover:not(:disabled){border-color:#b9c4d8}
+.opt .L{font-weight:700;margin-right:6px}
+.opt.picked{border-color:var(--pick);background:var(--pickbg)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default;opacity:.96}
+.check{margin-top:10px;background:var(--ink);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:600;cursor:pointer}
+.check:disabled{background:#aab3c5;cursor:not-allowed}
+.verdict{margin-top:10px;font-size:14px;font-weight:700;display:none}
+.verdict.ok{color:var(--ok);display:block}.verdict.no{color:var(--no);display:block}
+#results{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:22px;display:none}
+#results h2{font-size:20px;margin-bottom:6px}
+.band{font-size:15px;margin:8px 0}
+.band.mut{color:var(--mut)}
+.again{margin-top:14px;background:var(--ink);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:600;cursor:pointer}
+footer{margin-top:26px;font-size:12.5px;color:var(--mut);text-align:center;padding:0 12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">CCAR-F Practice Mock · Set 01 · Block 1 of 4</div>
+  <h1>Customer Support Resolution Agent — NimbusCart</h1>
+  <div class="sub">15 questions · click an option to reveal the answer · no explanations — that's the video's job</div>
+</header>
+
+<div class="brief">
+  <h2>Scenario Brief</h2>
+  NimbusCart is a mid-sized online retailer running ~3,400 support conversations a day through <b>Aria</b>, a resolution agent built on the Agent SDK. Core MCP tools: <code>get_customer</code>, <code>lookup_order</code>, <code>process_refund</code>, <code>escalate_to_human</code>; <code>issue_store_credit</code> was added last quarter, and the tool list has crept to 18. Refund policy: auto-approved ≤ $150 · $150–$500 requires identity verification · &gt; $500 goes to a human. Target: 80% first-contact resolution (currently 71%).
+</div>
+
+<div class="scorebar">
+  <span><span id="prog">Answered 0 / 15</span> · <span id="score">Score 0</span></span>
+  <span class="load" id="loadinfo">loading…</span>
+</div>
+
+<!-- Q1 -->
+<div class="qcard" data-ans="0">
+  <div class="qnum">Question 1</div>
+  <div class="stem">During a weekly audit of 1,200 resolved conversations, you find 108 cases where the agent's final message says "I've issued your refund," but the tool logs show process_refund never ran, and the cases were marked resolved. What is the most likely root cause?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>The loop resolves a case as soon as a reply arrives with no tool_use block, so a turn that only narrates the refund ends it.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>stop_reason is returning "max_tokens" on these turns, and the loop treats any stop_reason other than "tool_use" as success.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Tool results are appended without their matching tool_use IDs, so process_refund results never reach the model.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>The system prompt never instructs the agent to call process_refund before confirming, so narrating the refund feels sufficient to the model.</button>
+</div>
+
+<!-- Q2 -->
+<div class="qcard" data-ans="2">
+  <div class="qnum">Question 2</div>
+  <div class="stem">NimbusCart's support lead proposes replacing model-driven tool selection with a hard-coded keyword router — any message containing "refund" routes straight to process_refund — to "guarantee consistency." How should you evaluate this proposal?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Approve it: keyword routing is deterministic, so it will always outperform model-driven selection on consistency and accuracy.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Approve it, but only for the exact phrase "refund my order" — narrowing the keywords keeps the router accurate.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Reject it as the primary mechanism: ambiguous, multi-intent messages are exactly where keyword routers misroute, and deterministic guarantees belong in policy gates, not intent routing.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Reject it because the Claude API does not support routing logic that runs outside the model.</button>
+</div>
+
+<!-- Q3 -->
+<div class="qcard" data-ans="1">
+  <div class="qnum">Question 3</div>
+  <div class="stem">Policy: refunds between $150 and $500 require identity verification first. The system prompt says "You MUST verify identity before processing refunds in this range," but an audit finds 2.8% of in-range refunds went through unverified. Compliance here must be deterministic. What is the most effective fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Strengthen the instruction to "NEVER process an unverified refund" and add two few-shot examples of correct behavior, drawn from real transcripts.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Intercept process_refund in code and block in-range calls unless a completed verification exists for the session, routing unverified attempts to verification first.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Require the agent to emit a JSON checklist each turn confirming verification is complete, and log it for audit.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Run a nightly job that reverses in-range refunds lacking verification and re-opens the tickets.</button>
+</div>
+
+<!-- Q4 -->
+<div class="qcard" data-ans="3">
+  <div class="qnum">Question 4</div>
+  <div class="stem">When escalate_to_human fires, the human agent currently receives the agent's last 40 messages. Human agents report spending 6–8 minutes reconstructing basic facts before acting, and these handoffs score lowest on internal CSAT. What is the most effective improvement?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Pass the complete raw transcript from turn one, so nothing is summarized away.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Generate a rolling plain-language summary of the conversation and attach it to the handoff.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Have the agent ask the customer to restate the issue once the human joins, so the human hears it firsthand.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Send a structured handoff summary — customer and order IDs, amounts, dates, root cause, actions already attempted, recommended next action — with the transcript available on demand.</button>
+</div>
+
+<!-- Q5 -->
+<div class="qcard" data-ans="2">
+  <div class="qnum">Question 5</div>
+  <div class="stem">get_customer and lookup_order return timestamps as Unix epochs (for example, 1758931200). In 14% of cases involving date math — "has it been more than 30 days since delivery?" — the agent's window calculation is wrong. What is the most effective first step?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Add a prompt rule: "When comparing dates, compute carefully using the order's timestamps."</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Add a date-arithmetic tool the model must call for every date comparison, and route all timestamp math through it.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Convert epoch timestamps to ISO 8601 with a human-readable label ("2025-09-27, 34 days ago") in a PostToolUse hook, before results reach the model.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Increase the context window available to the session so both timestamps stay visible.</button>
+</div>
+
+<!-- Q6 MR -->
+<div class="qcard mr" data-ans="0,2">
+  <div class="qnum">Question 6 · Select TWO</div>
+  <div class="stem">A single message arrives: wrong item shipped on order #8841, a duplicate charge of $89.90 on the card, and a request to cancel the subscription. The agent resolves concerns sequentially and drops at least one concern in 18% of these multi-issue cases. Which TWO actions best address this? (Select TWO.)</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Decompose the request into its concerns, investigate them independently (and in parallel where tools allow), then synthesize one resolution covering all three.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Add a system-prompt rule: "Always address every issue the customer raises before closing."</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Require a final structured output that lists each detected concern with its status (resolved, pending, escalated), validated before the reply is sent.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Split such requests into three separate agent sessions, one per concern, so each gets full attention.</button>
+  <button class="opt" data-j="4"><span class="L">E.</span>Ask customers to send each issue as a separate message so the agent can handle them one at a time.</button>
+  <button class="check" disabled>Check answer</button>
+  <div class="verdict"></div>
+</div>
+
+<!-- Q7 -->
+<div class="qcard" data-ans="0">
+  <div class="qnum">Question 7</div>
+  <div class="stem">After issue_store_credit shipped, 11% of refund-eligible customers receive store credit instead of a card refund, and complaints follow. The tool descriptions read: process_refund — "Issue a refund to the customer." issue_store_credit — "Issue credit to the customer's account." What is the most effective first step?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Rewrite both descriptions to state boundaries and decision criteria — when each applies, when the other applies, amount and eligibility rules, and an example query for each.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Add few-shot conversation examples that demonstrate choosing process_refund for refund requests.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Add keywords to the system prompt mapping "refund" to process_refund so the association is explicit.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Disable issue_store_credit until misrouting drops, then re-enable it unchanged.</button>
+</div>
+
+<!-- Q8 MR -->
+<div class="qcard mr" data-ans="0,1">
+  <div class="qnum">Question 8 · Select TWO</div>
+  <div class="stem">The support agent now exposes 18 tools, including internal operations tools like bulk_order_adjust and warehouse_override. Tool-selection accuracy fell from 96% to 81%, and transcripts show warehouse tools occasionally invoked in customer conversations. Which TWO actions should you take? (Select TWO.)</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Reduce the agent's toolset to the tools its role needs, removing internal operations tools from its scope entirely.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Split the overloaded lookup_order — which currently handles order status, invoices, shipments, and returns — into purpose-specific tools with clear contracts.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Publish the full 18-tool list in the system prompt so the model can consider every option before choosing.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Train a small classifier that predicts the correct tool from the message and force its choice.</button>
+  <button class="opt" data-j="4"><span class="L">E.</span>Force tool_choice to get_customer on the first turn of every conversation, then release to auto.</button>
+  <button class="check" disabled>Check answer</button>
+  <div class="verdict"></div>
+</div>
+
+<!-- Q9 -->
+<div class="qcard" data-ans="3">
+  <div class="qnum">Question 9</div>
+  <div class="stem">When a refund exceeds NimbusCart's auto-approval limit, process_refund fails with the string "Operation failed." The agent retries the same call three times, then tells the customer "our system is having trouble, please try again later." What is the most effective fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Retry with exponential backoff up to five attempts before responding, since the failure may be transient.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Catch the failure and return an empty successful result, letting the confirmation flow complete and flagging the ticket for manual review.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Raise the auto-approval limit above the current refund so these calls stop failing.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Return a structured error — isError true, errorCategory "business_rule", isRetryable false, plus a plain-language explanation — so the agent escalates instead of retrying.</button>
+</div>
+
+<!-- Q10 -->
+<div class="qcard" data-ans="0">
+  <div class="qnum">Question 10</div>
+  <div class="stem">For order-status and billing questions, the agent sometimes answers from general knowledge without calling any tool — "your order shipped Tuesday" — and the answer is wrong in 22% of those cases. Every account-specific answer must rest on fresh data. Which tool_choice configuration fits best?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Force {"type": "tool", "name": "get_customer"} on the first turn of account-specific conversations, then return to "auto" for later turns.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Keep tool_choice "auto" and add the instruction: "Never answer account questions without checking the account first."</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Set tool_choice "any" on every turn, so the model must call at least one tool before any reply.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Force {"type": "tool", "name": "lookup_order"} on every turn of every conversation.</button>
+</div>
+
+<!-- Q11 MR -->
+<div class="qcard mr" data-ans="0,2">
+  <div class="qnum">Question 11 · Select TWO</div>
+  <div class="stem">Policy-gap cases — the customer asks for something policy doesn't cover, like matching a competitor's price — are handled inconsistently: transcripts show similar cases improvised with goodwill credits, escalated, or declined. The prompt already says "escalate when policy is unclear," but behavior varies. Which TWO changes are most effective? (Select TWO.)</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Add two to four few-shot examples of genuine policy-gap cases, each showing escalation as the chosen action.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Rewrite the instruction as "You MUST ALWAYS escalate any case that is even slightly unclear."</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Vary those examples across returns, billing, and account cases, and show why escalation beats the plausible alternative — an improvised goodwill credit — in each.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Route every case containing the word "policy" to a human reviewer before the agent responds.</button>
+  <button class="opt" data-j="4"><span class="L">E.</span>Trigger escalation whenever the customer's sentiment score crosses a negative threshold.</button>
+  <button class="check" disabled>Check answer</button>
+  <div class="verdict"></div>
+</div>
+
+<!-- Q12 -->
+<div class="qcard" data-ans="1">
+  <div class="qnum">Question 12</div>
+  <div class="stem">The refund payload sent to the payments service uses a JSON schema with refund_reason as a required enum [damaged, wrong_item, late_delivery] and transit_insurance as a required boolean. In 7% of payloads the reason lands in a free-text notes field, or transit_insurance is true when the customer never mentioned insurance. What is the most effective schema change?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Keep both fields required and add "Never guess values that are not stated" to the extraction prompt.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Add "other" and "unclear" to the reason enum with a reason_detail string, and make transit_insurance optional and nullable so absence is expressible.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Keep the schema unchanged but retry any payload that fails downstream validation, up to three attempts.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Drop the enum entirely and let the reason be free text, with the payments service parsing it later.</button>
+</div>
+
+<!-- Q13 -->
+<div class="qcard" data-ans="3">
+  <div class="qnum">Question 13</div>
+  <div class="stem">In billing disputes that run past 30 turns, the agent's progressive summary slowly rewrites early facts — an $89.90 duplicate charge from October 3 becomes "about $85… early October" — and 19% of these long disputes end with the customer re-litigating the basics. What is the most effective fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Make the summarization prompt more conservative so fewer details are compressed in long conversations.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Shorten the customer's early messages out of context once summarized, freeing room for recent turns.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Ask the customer to confirm the amount and date again once the conversation passes 20 turns.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Keep a persistent case-facts block — amounts, dates, order IDs, statuses, commitments made — injected into context every turn, outside the summarized history.</button>
+</div>
+
+<!-- Q14 -->
+<div class="qcard" data-ans="2">
+  <div class="qnum">Question 14</div>
+  <div class="stem">A transcript review finds cases where the customer says "this is ridiculous, just get me a human" at turn 3. The agent responds with apologies, investigates four more turns, and offers two alternative resolutions before transferring. These cases average CSAT 1.8. What went wrong?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>The agent should have escalated on the negative sentiment alone — the sentiment threshold was set too high to fire at turn 3.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>The agent treated a frustrated-but-solvable case as escalable and transferred too early, losing the resolution opportunity.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>An explicit request for a human is a valid escalation trigger that should be honoured immediately — the transfer starts right away, with context attached, not after further investigation.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>The agent lacked de-escalation training data, so it kept engaging; more empathetic phrasing would have retained the conversation.</button>
+</div>
+
+<!-- Q15 MR -->
+<div class="qcard mr" data-ans="0,1">
+  <div class="qnum">Question 15 · Select TWO</div>
+  <div class="stem">lookup_order hits a legacy gateway for pre-2023 orders, which times out intermittently — about 6% of lookups. When it fails, the agent tells customers "I couldn't find any orders on your account," and the case proceeds as if the customer had no order history. Which TWO changes should you make? (Select TWO.)</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Mark gateway failures as errors distinct from valid empty results — isError true with a transient errorCategory — so "no orders" is never concluded from a failed lookup.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Retry transient failures locally with backoff, and if the lookup still fails, continue with partial results and escalate with what was attempted.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>End the conversation with an apology and ask the customer to call the support line instead.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Exclude pre-2023 orders from the agent's scope and state plainly that it can only see recent orders.</button>
+  <button class="opt" data-j="4"><span class="L">E.</span>Pass the gateway's raw timeout response through to the model so it can see the failure for itself.</button>
+  <button class="check" disabled>Check answer</button>
+  <div class="verdict"></div>
+</div>
+
+<div id="results">
+  <h2 id="rline"></h2>
+  <div class="band" id="rband"></div>
+  <div class="band mut">Multiple-response items are scored all-or-nothing — exactly like selecting the stated number on exam day.</div>
+  <button class="again" onclick="location.reload()">Reset quiz</button>
+</div>
+
+<footer>PeaceOfCode · Claude Certified Architect Foundations course · Unofficial practice questions — not affiliated with Anthropic</footer>
+
+</div>
+
+<script>
+(function(){
+var cards=[].slice.call(document.querySelectorAll('.qcard'));
+var total=cards.length,answered=0,correct=0;
+document.getElementById('loadinfo').textContent=total+' / 15 questions loaded';
+document.getElementById('prog').textContent='Answered 0 / '+total;
+function bar(){document.getElementById('prog').textContent='Answered '+answered+' / '+total;document.getElementById('score').textContent='Score '+correct}
+function fin(){if(answered===total){var r=document.getElementById('results');r.style.display='block';document.getElementById('rline').textContent='You scored '+correct+' / '+total;
+var b;if(correct>=13)b='Exam-ready on this block — this is what correct-first-instinct looks like.';else if(correct>=10)b='Close — replay your misses and name the trap that caught you.';else b='Revise the episodes for these domains, rest a day, then rerun this block cold.';
+document.getElementById('rband').textContent=b;r.scrollIntoView({behavior:'smooth'})}}
+cards.forEach(function(c){
+var ans=c.getAttribute('data-ans').split(',').map(Number);
+var opts=[].slice.call(c.querySelectorAll('.opt'));
+var isMR=c.classList.contains('mr');
+if(!isMR){
+ opts.forEach(function(b){b.addEventListener('click',function(){
+  if(c.getAttribute('data-done'))return;c.setAttribute('data-done','1');answered++;
+  var j=+b.getAttribute('data-j');
+  opts.forEach(function(x){x.disabled=true;var k=+x.getAttribute('data-j');if(ans.indexOf(k)>-1)x.classList.add('right')});
+  if(ans.indexOf(j)>-1){correct++;b.classList.add('right')}else{b.classList.add('wrong')}
+  bar();fin();
+ })});
+}else{
+ var chk=c.querySelector('.check'),v=c.querySelector('.verdict'),sel=[];
+ opts.forEach(function(b){b.addEventListener('click',function(){
+  if(c.getAttribute('data-done'))return;
+  var j=+b.getAttribute('data-j'),ix=sel.indexOf(j);
+  if(ix>-1){sel.splice(ix,1);b.classList.remove('picked')}
+  else if(sel.length<2){sel.push(j);b.classList.add('picked')}
+  chk.disabled=(sel.length!==2);
+ })});
+ chk.addEventListener('click',function(){
+  if(c.getAttribute('data-done')||sel.length!==2)return;c.setAttribute('data-done','1');answered++;
+  var win=ans.every(function(a){return sel.indexOf(a)>-1});
+  opts.forEach(function(x){x.disabled=true;var k=+x.getAttribute('data-j');
+   if(ans.indexOf(k)>-1)x.classList.add('right');else if(sel.indexOf(k)>-1)x.classList.add('wrong');
+   x.classList.remove('picked')});
+  if(win){correct++;v.textContent='Correct — both selected answers match.';v.className='verdict ok'}
+  else{v.textContent='Not quite — the correct pair is highlighted in green.';v.className='verdict no'}
+  bar();fin();
+ });
+}
+});
+})();
+</script>
+</body>
+</html>
