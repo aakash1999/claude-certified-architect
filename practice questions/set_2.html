@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCAR-F Practice Mock · Set 01 · Block 2 — Multi-Agent Research System</title>
+<style>
+:root{--ink:#1a2030;--mut:#5b6478;--line:#e3e7ef;--card:#fff;--bg:#f4f6fa;--ok:#0c7a43;--okbg:#e6f6ec;--no:#b3261e;--nobg:#fbeae9;--pick:#1f5eff;--pickbg:#eaf0ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding-bottom:56px}
+.wrap{max-width:780px;margin:0 auto;padding:20px 16px}
+header{padding:26px 0 10px}
+.kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:700}
+h1{font-size:26px;margin:6px 0 4px}
+.sub{color:var(--mut);font-size:15px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0;font-size:14.5px}
+.brief h2{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+.scorebar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;font-weight:600;flex-wrap:wrap}
+.load{font-size:12px;color:var(--mut);font-weight:700}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:18px 0}
+.qnum{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);font-weight:700;margin-bottom:8px}
+.stem{font-size:16px;margin-bottom:14px}
+.opt{display:block;width:100%;text-align:left;background:#fbfcfe;border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;margin:8px 0;font-size:15px;cursor:pointer;transition:.12s;font-family:inherit;color:var(--ink)}
+.opt:hover:not(:disabled){border-color:#b9c4d8}
+.opt .L{font-weight:700;margin-right:6px}
+.opt.picked{border-color:var(--pick);background:var(--pickbg)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default;opacity:.96}
+.check{margin-top:10px;background:var(--ink);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:600;cursor:pointer}
+.check:disabled{background:#aab3c5;cursor:not-allowed}
+.verdict{margin-top:10px;font-size:14px;font-weight:700;display:none}
+.verdict.ok{color:var(--ok);display:block}.verdict.no{color:var(--no);display:block}
+#results{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:22px;display:none}
+#results h2{font-size:20px;margin-bottom:6px}
+.band{font-size:15px;margin:8px 0}
+.band.mut{color:var(--mut)}
+.again{margin-top:14px;background:var(--ink);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:600;cursor:pointer}
+footer{margin-top:26px;font-size:12.5px;color:var(--mut);text-align:center;padding:0 12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">CCAR-F Practice Mock · Set 01 · Block 2 of 4</div>
+  <h1>Multi-Agent Research System — Meridian Insights</h1>
+  <div class="sub">15 questions · click an option to reveal the answer · no explanations — that's the video's job</div>
+</header>
+
+<div class="brief">
+  <h2>Scenario Brief</h2>
+  Meridian Insights is a boutique market-intelligence firm producing ~120 client reports a month for 40 enterprise customers. Its product is <b>Atlas</b>, a research system on the Agent SDK: a coordinator that decomposes each client question and delegates to four subagents, <code>web_research</code>, <code>document_analysis</code>, <code>data_synthesis</code>, and <code>report_writer</code>. Subagents run in isolated contexts and report back to the coordinator, which aggregates and resolves gaps. Deep-dive analyses are prototyped as named Claude Code sessions. Targets: citation accuracy ≥98% (currently 91%), full coverage of every requested dimension, turnaround under 15 minutes.
+</div>
+
+<div class="scorebar">
+  <span><span id="prog">Answered 0 / 15</span> · <span id="score">Score 0</span></span>
+  <span class="load" id="loadinfo">loading…</span>
+</div>
+
+<!-- Q1 -->
+<div class="qcard" data-ans="0">
+  <div class="qnum">Question 1</div>
+  <div class="stem">A client requests a competitive landscape of solid-state battery startups covering four dimensions: funding, technical approach, production risks, and time-to-market. The coordinator decomposes the request into three subagent tasks: funding rounds, technical approaches, and production timelines. Across 30 recent reports, the production-risks dimension is missing from 18, and every one was caught only after client review. Each subagent performs its assigned task correctly. What is the most likely root cause?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>The decomposition itself dropped a required dimension: no subagent was ever scoped to production risks, and nothing checks the synthesis against the original request.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>The subagents' system prompts should instruct each one to also cover risks outside its assigned scope.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>The coordinator cannot hold four dimensions in working memory and drops one under load.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>A fourth general-purpose subagent should be added to catch whatever the three specialists miss.</button>
+</div>
+
+<!-- Q2 -->
+<div class="qcard" data-ans="2">
+  <div class="qnum">Question 2</div>
+  <div class="stem">First drafts of five-section reports arrive strong on three sections and thin on two: the market-size section cites 2 sources, one dated 2023, and the competitor section misses 3 of the client's named competitors. What is the most effective refinement pattern?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Regenerate the entire report from scratch until all five sections meet the quality bar.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Have the report-writer subagent expand the thin sections with general industry background before delivery.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>The coordinator checks each draft against the original request, identifies the specific gaps, and re-delegates targeted follow-up tasks with the partial findings attached.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Route the thin sections to human analysts to complete before the report ships.</button>
+</div>
+
+<!-- Q3 -->
+<div class="qcard" data-ans="1">
+  <div class="qnum">Question 3</div>
+  <div class="stem">In recent reports, the document-analysis findings never reference the web findings the coordinator collected earlier; readers see two parallel investigations stitched together, not one analysis. The document subagent was invoked with the prompt: "Analyze the attached documents for market signals." What is the most likely cause?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>The subagent's context window is too small to hold both the documents and the coordinator's earlier summary.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Subagents do not inherit the coordinator's conversation, and the prompt included none of the prior findings: a subagent works only with what it is explicitly given.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>A session-configuration bug is blocking memory sharing between coordinator and subagent; enabling a shared memory store will fix it.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>The documents genuinely contain nothing related to the web findings, so no connection exists to make.</button>
+</div>
+
+<!-- Q4 -->
+<div class="qcard" data-ans="3">
+  <div class="qnum">Question 4</div>
+  <div class="stem">The web subagent returns findings as prose paragraphs, with URLs, publisher names, and publication dates embedded mid-sentence. In last month's audit, 11% of sampled citations pointed to the wrong source. What is the most effective fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Add an instruction: "Be extremely careful with attribution and always name the correct source."</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Run a regex post-processor over the prose to extract URLs and dates after each subagent returns.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Have the coordinator independently re-search every claim to verify its source before publication.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Require findings in a structured format that separates content from metadata: claim text in one field, source URL, publisher, and publication date in dedicated fields.</button>
+</div>
+
+<!-- Q5 MR -->
+<div class="qcard mr" data-ans="0,1">
+  <div class="qnum">Question 5 · Select TWO</div>
+  <div class="stem">Atlas's coordinator follows a fixed procedure: web subagent first, then documents, then data extraction, then writing, one spawn per turn, even when the first three investigations are independent. Average end-to-end time is 24 minutes; comparable systems report 9. Which TWO changes are most effective? (Select TWO.)</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Let the coordinator decide which subagents a query needs, and spawn all independent investigations in a single response so they run concurrently.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Rewrite the coordinator's instructions as goals and quality criteria rather than a fixed step-by-step procedure.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Replace the coordinator with a non-LLM workflow engine that invokes subagents in a fixed order.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Give every subagent access to the full 22-tool configuration so phase handoffs disappear.</button>
+  <button class="opt" data-j="4"><span class="L">E.</span>Run three parallel Atlas instances per report and merge their outputs at the end.</button>
+  <button class="check" disabled>Check answer</button>
+  <div class="verdict"></div>
+</div>
+
+<!-- Q6 -->
+<div class="qcard" data-ans="1">
+  <div class="qnum">Question 6</div>
+  <div class="stem">For deep-dive analyses, your team runs research baselines as named Claude Code sessions. For one contested client question, two analysts should each explore a competing hypothesis in parallel, continuing from the same 40-minute shared baseline without re-running it. What is the best mechanism?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Have both analysts --resume the same session name and take turns on alternate days.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Fork the baseline session: each analyst branches from the shared analysis to pursue one hypothesis, then the branches merge findings.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Start two fresh sessions and paste the baseline transcript into both as context.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Run the baseline twice, once per hypothesis, so each session stays independent.</button>
+</div>
+
+<!-- Q7 -->
+<div class="qcard" data-ans="0">
+  <div class="qnum">Question 7</div>
+  <div class="stem">The document subagent now exposes search_filings, described as "Search for information." The web subagent exposes search, described as "Search for information on the web." The coordinator sends filing queries to the web subagent in 13% of cases. What is the most effective first step?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Rewrite both names and descriptions to state purpose and boundaries: what each searches, what it does not cover, and an example query for each.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Add few-shot examples showing the coordinator choosing search_filings for filing queries.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Add a system-prompt rule mapping the word "filing" to the document subagent.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Merge both tools into one unified search that spans the web and the filings library.</button>
+</div>
+
+<!-- Q8 MR -->
+<div class="qcard mr" data-ans="1,2">
+  <div class="qnum">Question 8 · Select TWO</div>
+  <div class="stem">During a document pass, the subagent hits a transient gateway timeout on one source and a hard paywall (permission denied) on another. Today any error kills the entire pass, so reports ship with the whole filings section missing. Which TWO changes should you make? (Select TWO.)</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Retry the paywalled source up to five times with increasing delays before giving up.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Retry transient failures locally with backoff, inside the subagent, without escalating.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>For unresolvable failures such as paywalls, return partial results with a structured note: what failed, what was attempted, and what alternatives exist.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Record the failed sources as "no findings" and mark the pass complete so the report can ship.</button>
+  <button class="opt" data-j="4"><span class="L">E.</span>Fail the whole report back to the client with an apology whenever any source errors.</button>
+  <button class="check" disabled>Check answer</button>
+  <div class="verdict"></div>
+</div>
+
+<!-- Q9 MR -->
+<div class="qcard mr" data-ans="0,2">
+  <div class="qnum">Question 9 · Select TWO</div>
+  <div class="stem">After a refactor, every subagent shares one 22-tool configuration. The synthesis subagent now spends turns browsing raw web pages, and the web subagent sometimes drafts report sections itself. Which TWO actions should you take? (Select TWO.)</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Define each subagent with only the tools its role requires, using its agent definition's tool restrictions.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Grant the coordinator every tool in the configuration so it can cover for any subagent.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Give the synthesis subagent one narrow exception, a verify_fact tool for quick checks, while complex verification still routes through the coordinator.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Strip tools from all subagents and have the coordinator perform every tool call itself.</button>
+  <button class="opt" data-j="4"><span class="L">E.</span>Add a keyword classifier that must approve every subagent tool call before it runs.</button>
+  <button class="check" disabled>Check answer</button>
+  <div class="verdict"></div>
+</div>
+
+<!-- Q10 -->
+<div class="qcard" data-ans="2">
+  <div class="qnum">Question 10</div>
+  <div class="stem">Before every report, subagents burn 12 to 16 tool calls just discovering what exists: listing folders, opening files to check titles, probing the database schema. What is the most effective fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Add a list_files tool with a rich description so discovery takes one well-described call.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Increase the subagents' context windows so the full folder tree fits without calls.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Expose MCP resources: a document-library catalog and the database schema that connected agents can read at connection time, without exploratory calls.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Send each subagent a nightly digest describing newly added documents.</button>
+</div>
+
+<!-- Q11 -->
+<div class="qcard" data-ans="1">
+  <div class="qnum">Question 11</div>
+  <div class="stem">Reports ship as prose. A downstream fact-checking pipeline re-extracts claims and sources from the report's sentences, and 9% of extracted claims end up misattributed. What is the most effective fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Add "Always double-check every attribution before writing" to the synthesis prompt.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Emit claims as structured objects (claim, source ID, supporting quote, confidence) through a tool-use schema, and render the prose from that.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Hire citation QA staff to verify every claim against its source before publication.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Mandate a stricter writing style with footnotes so downstream extraction becomes easier.</button>
+</div>
+
+<!-- Q12 -->
+<div class="qcard" data-ans="3">
+  <div class="qnum">Question 12</div>
+  <div class="stem">A market-sizing section quotes a source's stated total of $4.2B while the report's own segment table sums to $3.6B. Three clients have flagged the discrepancy before anyone internally caught it. What is the most effective fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Instruct the model to be extra careful with numbers and to recheck every total.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Assign a human proofreader to recompute every table in every report.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Remove the stated total from reports and keep only the segment table.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Add semantic self-checks to the structured output: calculated_total beside stated_total, plus a conflict_detected flag, with conflicts routed for reconciliation before shipping.</button>
+</div>
+
+<!-- Q13 -->
+<div class="qcard" data-ans="0">
+  <div class="qnum">Question 13</div>
+  <div class="stem">In research runs past 90 minutes, late-session subagents drift: they cite "typical market patterns" instead of the specific client sector identified in the first 20 minutes of the same run. What is the most effective first step?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Summarize each phase's key findings into a compact state before spawning the next phase, and keep a scratchpad of client-specific facts the run has established.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Restart every subagent session every 20 minutes so context stays fresh.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Increase the context window so the first 20 minutes can never fall out of view.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Cap report length so runs finish inside 90 minutes.</button>
+</div>
+
+<!-- Q14 -->
+<div class="qcard" data-ans="2">
+  <div class="qnum">Question 14</div>
+  <div class="stem">A "top 8 battery manufacturers" report covers 5 manufacturers in depth; data access failed for the other 3, but the executive summary still calls the analysis comprehensive. The client discovered the gaps during a live Q&A. What is the most effective fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Fill the 3 missing profiles with generic industry background so all 8 sections appear complete.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Ask clients to submit follow-up requests for any manufacturer they want covered in depth.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Require the synthesis to carry explicit coverage annotations: what was investigated, what could not be accessed and why, and per-section source counts.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Retitle future reports to "top 5" so coverage always matches the title.</button>
+</div>
+
+<!-- Q15 -->
+<div class="qcard" data-ans="1">
+  <div class="qnum">Question 15</div>
+  <div class="stem">Two credible sources disagree: a March 2026 consultancy report projects 23% CAGR through 2030; a September 2025 industry-association report projects 17%. The synthesis quietly uses 23%, and clients holding the second report dispute the numbers. What is the most effective approach?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Average the figures and present 20% as the consensus estimate.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Present both figures with sources and publication dates, note the methodological and period differences, and let the coordinator reconcile or present the range explicitly.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Default to the more recent source, since newer research supersedes older research.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Drop the older figure so readers are not confused by conflicting numbers.</button>
+</div>
+
+<div id="results">
+  <h2 id="rline"></h2>
+  <div class="band" id="rband"></div>
+  <div class="band mut">Multiple-response items are scored all-or-nothing — exactly like selecting the stated number on exam day.</div>
+  <button class="again" onclick="location.reload()">Reset quiz</button>
+</div>
+
+<footer>PeaceOfCode · Claude Certified Architect Foundations course · Unofficial practice questions — not affiliated with Anthropic</footer>
+
+</div>
+
+<script>
+(function(){
+var cards=[].slice.call(document.querySelectorAll('.qcard'));
+var total=cards.length,answered=0,correct=0;
+document.getElementById('loadinfo').textContent=total+' / 15 questions loaded';
+document.getElementById('prog').textContent='Answered 0 / '+total;
+function bar(){document.getElementById('prog').textContent='Answered '+answered+' / '+total;document.getElementById('score').textContent='Score '+correct}
+function fin(){if(answered===total){var r=document.getElementById('results');r.style.display='block';document.getElementById('rline').textContent='You scored '+correct+' / '+total;
+var b;if(correct>=13)b='Exam-ready on this block — you are thinking in layers.';else if(correct>=10)b='Close — replay your misses and name which layer you mis-diagnosed.';else b='Revise Ep 02 and Ep 03 first, rest a day, then rerun this block cold.';
+document.getElementById('rband').textContent=b;r.scrollIntoView({behavior:'smooth'})}}
+cards.forEach(function(c){
+var ans=c.getAttribute('data-ans').split(',').map(Number);
+var opts=[].slice.call(c.querySelectorAll('.opt'));
+var isMR=c.classList.contains('mr');
+if(!isMR){
+ opts.forEach(function(b){b.addEventListener('click',function(){
+  if(c.getAttribute('data-done'))return;c.setAttribute('data-done','1');answered++;
+  var j=+b.getAttribute('data-j');
+  opts.forEach(function(x){x.disabled=true;var k=+x.getAttribute('data-j');if(ans.indexOf(k)>-1)x.classList.add('right')});
+  if(ans.indexOf(j)>-1){correct++;b.classList.add('right')}else{b.classList.add('wrong')}
+  bar();fin();
+ })});
+}else{
+ var chk=c.querySelector('.check'),v=c.querySelector('.verdict'),sel=[];
+ opts.forEach(function(b){b.addEventListener('click',function(){
+  if(c.getAttribute('data-done'))return;
+  var j=+b.getAttribute('data-j'),ix=sel.indexOf(j);
+  if(ix>-1){sel.splice(ix,1);b.classList.remove('picked')}
+  else if(sel.length<2){sel.push(j);b.classList.add('picked')}
+  chk.disabled=(sel.length!==2);
+ })});
+ chk.addEventListener('click',function(){
+  if(c.getAttribute('data-done')||sel.length!==2)return;c.setAttribute('data-done','1');answered++;
+  var win=ans.every(function(a){return sel.indexOf(a)>-1});
+  opts.forEach(function(x){x.disabled=true;var k=+x.getAttribute('data-j');
+   if(ans.indexOf(k)>-1)x.classList.add('right');else if(sel.indexOf(k)>-1)x.classList.add('wrong');
+   x.classList.remove('picked')});
+  if(win){correct++;v.textContent='Correct — both selected answers match.';v.className='verdict ok'}
+  else{v.textContent='Not quite — the correct pair is highlighted in green.';v.className='verdict no'}
+  bar();fin();
+ });
+}
+});
+})();
+</script>
+</body>
+</html>
