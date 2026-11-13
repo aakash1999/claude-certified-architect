@@ -58,7 +58,7 @@ Severity:  MEDIUM
 
 
 
-— Two examples covering different document structures —
+# — Two examples covering different document structures —
 """
 Extract: contract_value, effective_date, payment_terms
 
