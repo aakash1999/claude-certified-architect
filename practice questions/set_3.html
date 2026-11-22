@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCAR-F Practice Mock · Set 01 · Block 3 — Claude Code for Continuous Integration</title>
+<style>
+:root{--ink:#1a2030;--mut:#5b6478;--line:#e3e7ef;--card:#fff;--bg:#f4f6fa;--ok:#0c7a43;--okbg:#e6f6ec;--no:#b3261e;--nobg:#fbeae9;--pick:#1f5eff;--pickbg:#eaf0ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding-bottom:56px}
+.wrap{max-width:780px;margin:0 auto;padding:20px 16px}
+header{padding:26px 0 10px}
+.kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:700}
+h1{font-size:26px;margin:6px 0 4px}
+.sub{color:var(--mut);font-size:15px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0;font-size:14.5px}
+.brief h2{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+.scorebar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;font-weight:600;flex-wrap:wrap}
+.load{font-size:12px;color:var(--mut);font-weight:700}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:18px 0}
+.qnum{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);font-weight:700;margin-bottom:8px}
+.stem{font-size:16px;margin-bottom:14px}
+.opt{display:block;width:100%;text-align:left;background:#fbfcfe;border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;margin:8px 0;font-size:15px;cursor:pointer;transition:.12s;font-family:inherit;color:var(--ink)}
+.opt:hover:not(:disabled){border-color:#b9c4d8}
+.opt .L{font-weight:700;margin-right:6px}
+.opt.picked{border-color:var(--pick);background:var(--pickbg)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default;opacity:.96}
+.check{margin-top:10px;background:var(--ink);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:600;cursor:pointer}
+.check:disabled{background:#aab3c5;cursor:not-allowed}
+.verdict{margin-top:10px;font-size:14px;font-weight:700;display:none}
+.verdict.ok{color:var(--ok);display:block}.verdict.no{color:var(--no);display:block}
+#results{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:22px;display:none}
+#results h2{font-size:20px;margin-bottom:6px}
+.band{font-size:15px;margin:8px 0}
+.band.mut{color:var(--mut)}
+.again{margin-top:14px;background:var(--ink);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:600;cursor:pointer}
+footer{margin-top:26px;font-size:12.5px;color:var(--mut);text-align:center;padding:0 12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">CCAR-F Practice Mock · Set 01 · Block 3 of 4</div>
+  <h1>Claude Code for Continuous Integration — Ledgerline</h1>
+  <div class="sub">15 questions · click an option to reveal the answer · no explanations — that's the video's job</div>
+</header>
+
+<div class="brief">
+  <h2>Scenario Brief</h2>
+  Ledgerline moves money: payment infrastructure for 2,300 business customers, where every merge is audited and every bug has a dollar sign on it. Its 60 engineers open ~90 pull requests a week into the <b>ledgerline-core</b> monorepo. <b>Argus</b> is the CI reviewer — Claude Code running headless in the pipeline on every PR for automated code review and test generation, plus a nightly dependency audit across 140 service repos via the Message Batches API. Targets: ≥95% of posted findings actionable (currently 84%), review turnaround under 10 minutes, zero missed security-critical defects.
+</div>
+
+<div class="scorebar">
+  <span><span id="prog">Answered 0 / 15</span> · <span id="score">Score 0</span></span>
+  <span class="load" id="loadinfo">loading…</span>
+</div>
+
+<!-- Q1 -->
+<div class="qcard" data-ans="1">
+  <div class="qnum">Question 1</div>
+  <div class="stem">Argus already runs non-interactively with the -p flag, but every review prints one long markdown comment. The platform team wants each finding posted as an inline comment on the exact file and line, mapped automatically. What is the most effective way to get machine-parseable findings from each run?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Ask in the prompt for findings as a JSON list, then extract the JSON block from stdout with a parser and a regex fallback for malformed runs.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Run with --output-format json plus a JSON schema defining each finding — file, line, category, severity, suggested fix — so the pipeline maps validated output to inline comments.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Switch to --output-format stream-json and have the pipeline filter the live event stream down to the final assistant message, then parse that message as the findings.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Add a PostToolUse hook that reformats each file analysis into an inline-comment payload while the review is still running.</button>
+</div>
+
+<!-- Q2 -->
+<div class="qcard" data-ans="2">
+  <div class="qnum">Question 2</div>
+  <div class="stem">Argus generated a payout-service refactor across 40 files in one Claude Code session, then reviewed the resulting PR in that same session and reported no issues. A scheduled job re-ran the identical review in a fresh Claude Code instance with none of that session's context; it flagged three real defects, including a double-submit on retry. What is the most likely root cause?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>The review pass exhausted the session's context window partway through, so the files reviewed near the end received only shallow, surface-level attention.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>The review prompt omitted severity criteria, so the defects were seen but rated too minor to post.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>The generating session kept its own reasoning in context, making it reluctant to question decisions it had just made — a fresh instance reviews without that bias.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>The scheduled job ran on a newer model than the interactive session used, and the model difference alone explains the gap in findings.</button>
+</div>
+
+<!-- Q3 MR -->
+<div class="qcard mr" data-ans="0,2">
+  <div class="qnum">Question 3 · Select TWO</div>
+  <div class="stem">When a developer pushes a fix commit, Argus re-reviews the PR and re-posts everything from the previous run — last week one PR carried the same six already-fixed findings through four consecutive runs, and the team now mass-dismisses "bot spam" unread. Which TWO changes fix this? (Select TWO.)</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Feed the previous run's findings into the re-review's context.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Re-review only the files touched by the fix commit.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Instruct the re-review to report only new issues and previously reported issues that remain unaddressed.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Post one cumulative checklist per PR that grows with each run.</button>
+  <button class="opt" data-j="4"><span class="L">E.</span>Route any finding that appears in two consecutive runs to a human triage queue instead of the PR.</button>
+  <button class="check" disabled>Check answer</button>
+  <div class="verdict"></div>
+</div>
+
+<!-- Q4 -->
+<div class="qcard" data-ans="3">
+  <div class="qnum">Question 4</div>
+  <div class="stem">The review prompt says "Be conservative — only comment when highly confident." Argus still posts speculative race-condition warnings that maintainers cannot reproduce, and two developers have started dismissing every notification unread. What is the most effective change?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Have each finding carry a self-reported confidence score from the reviewer itself, and auto-drop anything scoring under 90 percent.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Run the review twice per PR, then post only the findings that both independent runs raise, and discard anything that either run happens to miss.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Cut the review down to just three categories so each remaining one receives deeper attention on every pass.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Replace it with categorical criteria: post bugs and security issues backed by evidence of incorrect behavior; skip style and local patterns — with stay-or-go examples per category.</button>
+</div>
+
+<!-- Q5 MR -->
+<div class="qcard mr" data-ans="1,3">
+  <div class="qnum">Question 5 · Select TWO</div>
+  <div class="stem">Two inconsistencies persist after the criteria rewrite. First, an intentional empty catch inside a retry loop — commented, deliberate — gets flagged as a swallowed exception on some runs and skipped on others. Second, the same missing null-guard is rated critical in one run and a suggestion in the next. Which TWO changes address these? (Select TWO.)</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Add "You MUST apply identical judgments to identical code in every single run, with no exceptions" to the system prompt.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Add two to four few-shot examples pairing real snippets with the right call, reasoning shown — an intentional pattern skipped, a genuine issue flagged.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Disable the exception-handling category altogether until its behavior stabilizes across multiple consecutive runs.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Define each severity level with concrete code examples from this codebase showing what critical, warning, and suggestion each look like.</button>
+  <button class="opt" data-j="4"><span class="L">E.</span>Post only the findings that survive two consecutive review runs completely unchanged.</button>
+  <button class="check" disabled>Check answer</button>
+  <div class="verdict"></div>
+</div>
+
+<!-- Q6 -->
+<div class="qcard" data-ans="0">
+  <div class="qnum">Question 6</div>
+  <div class="stem">The "defensive-copy suggestions" category is now dismissed by maintainers 7 times out of 10. Last week Argus caught a genuine stored-XSS in a payment callback — and the developer dismissed that too, unread, assuming spam. Reworking the category's criteria will take weeks. What is the most effective immediate step?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Temporarily disable the defensive-copy category while its criteria are reworked, so accurate categories like security regain the team's attention.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Disable every category except security until all of the remaining criteria have been fully reworked.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Prefix every defensive-copy comment with a LOW PRIORITY label so developers can learn to filter them out mentally.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Require a second maintainer's written approval before any defensive-copy suggestion is allowed to post on a PR.</button>
+</div>
+
+<!-- Q7 -->
+<div class="qcard" data-ans="2">
+  <div class="qnum">Question 7</div>
+  <div class="stem">Argus's overall finding acceptance is 94%, and leadership cites that number to end the weekly sampled human audit. You re-cut the same data by category first: null-safety 96%, error-handling 95%, security 93%, refactor suggestions 61% — and the sample skews heavily toward null-safety comments. What is the sound evaluation before reducing review?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Approve ending the audit: a 94% rate on a random sample already demonstrates that every category is covered adequately, including the smaller ones.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>End the audit for security findings only, since a missed XSS costs more than a missed refactor note.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>The average hides a weak segment: sample each category separately, fix or disable the weak one, and require every segment to hold its rate before review is reduced.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Have Argus self-report confidence on each finding and audit only the findings it marks low-confidence.</button>
+</div>
+
+<!-- Q8 -->
+<div class="qcard" data-ans="3">
+  <div class="qnum">Question 8</div>
+  <div class="stem">Argus keeps ignoring the team's agreed standards — the severity ladder and the shared fixture conventions. You trace it: the standards live in the CLAUDE.md on the laptop of the engineer who built Argus, because iterating there "was faster." CI runs never see that file, and new hires' local runs behave the same way. What is the root cause and the fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>The CI runner's context budget is too small to load every memory file it finds, so the standards get truncated mid-file — raise the budget.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>CLAUDE.md is not loaded in non-interactive runs, so the standards must be embedded in the review prompt itself.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>The standards need to be copied into each CI job's prompt template so every job carries its own copy.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>The standards live at user level — one engineer only, never shared. Move them to the project-level CLAUDE.md in the repo and verify what loads with /memory.</button>
+</div>
+
+<!-- Q9 -->
+<div class="qcard" data-ans="0">
+  <div class="qnum">Question 9</div>
+  <div class="stem">ledgerline-core mixes Terraform infrastructure, a React dashboard, and Kotlin services, and all three convention sets sit in one 400-line root CLAUDE.md. On CI runs that touch only Terraform files, Argus still loads — and sometimes applies — React conventions, burning context and occasionally suggesting React patterns inside .tf files. What is the most maintainable fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Move each area's conventions into .claude/rules/ files with a paths glob — for example, paths: ["terraform/**/*"] — so each loads only when matching files are in scope.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Place a directory-level CLAUDE.md inside each area's folder and delete the area sections from the root file.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Keep the single file but open it with an instruction to skip sections irrelevant to the files under review.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Reduce CLAUDE.md to universal standards and move area conventions to a wiki page that Argus can fetch at run time whenever a job needs them.</button>
+</div>
+
+<!-- Q10 -->
+<div class="qcard" data-ans="2">
+  <div class="qnum">Question 10</div>
+  <div class="stem">The team's review checklist prompt is pasted into three CI jobs — PR review, nightly audit, release gate. Two months on, the copies have drifted: the PR job and the release gate now use different severity vocabulary, and a checklist fix applied to one job never reached the other two. What is the most maintainable fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Store the canonical checklist inside the release-gate job's own config, and have the other two jobs fetch its prompt from there at runtime.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Keep one canonical copy on a team wiki page and point all three jobs at it by URL whenever they start.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Move the checklist into a project-scoped slash command under .claude/commands/, version-controlled with the code, and have all three jobs invoke the same command.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Merge the three jobs into a single pipeline step so only one copy of the prompt exists.</button>
+</div>
+
+<!-- Q11 -->
+<div class="qcard" data-ans="1">
+  <div class="qnum">Question 11</div>
+  <div class="stem">Argus needs the GitHub MCP server in CI to read linked issues and prior review threads. The engineer who set it up added the server in the user-scope config on the shared runner — ~/.claude.json — with a personal access token pasted inline. The token has expired, the setup exists on no one else's machine, and none of it is in version control. What is the most effective fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Move the server definition to a project .mcp.json committed to the repo, keeping the token inline but rotating it on a schedule.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Define the server in project-scoped .mcp.json with env-var expansion — ${GITHUB_TOKEN} — the real token injected from CI secrets; user scope stays for personal experiments.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Create a dedicated bot account and store its token in ~/.claude.json on every CI runner.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Drop the MCP server entirely and have Argus query the GitHub REST API through Bash curl commands it writes on the fly.</button>
+</div>
+
+<!-- Q12 MR -->
+<div class="qcard mr" data-ans="0,1">
+  <div class="qnum">Question 12 · Select TWO</div>
+  <div class="stem">A 22-file PR refactors the payout service. Argus reviews all 22 files in a single pass. It misses a cross-file break: file 3 renames initiate_payout() while file 17 still calls the old name; the PR's own tests mock the boundary, so CI stays green and staging breaks. Per-file depth is uneven too — some files get line-level notes, others barely a glance. Which TWO changes? (Select TWO.)</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Split the review into focused per-file passes for local issues.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Add a separate integration pass that traces data flow and API contracts across the changed files as one unit.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Add a grep step that flags any caller of a renamed symbol before the review runs.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Raise max_tokens so the full 22-file diff fits in one pass with room to reason.</button>
+  <button class="opt" data-j="4"><span class="L">E.</span>Review only files with more than 50 changed lines, treating small diffs as low-risk.</button>
+  <button class="check" disabled>Check answer</button>
+  <div class="verdict"></div>
+</div>
+
+<!-- Q13 -->
+<div class="qcard" data-ans="1">
+  <div class="qnum">Question 13</div>
+  <div class="stem">Engineering asks Argus to "add comprehensive tests" to a legacy settlement module: 60 files, zero existing tests, dense domain logic, unclear dependencies. The first blanket run produced 200 shallow happy-path tests — several of them locking in current buggy behavior as "expected." What is the best approach for the next run?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Generate tests for all 60 files in parallel batches and have reviewers prune the low-value ones.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Map the module's structure first — entry points, critical paths, dependencies — then a prioritized plan for high-impact areas: settlement math, idempotency, failure paths — adapting as dependencies surface.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Work through the files alphabetically, ten per run, until coverage is even across the module.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Request a coverage report per file first, and generate tests wherever coverage measures lowest, so that effort always follows the biggest numeric gaps in the module.</button>
+</div>
+
+<!-- Q14 -->
+<div class="qcard" data-ans="0">
+  <div class="qnum">Question 14</div>
+  <div class="stem">For newer services that already have suites, Argus keeps proposing tests the codebase already covers: last sprint, 70 of its 180 proposed tests were near-copies of existing cases, and maintainers burn review time spotting them. The generation run never receives the existing test files. What is the most effective fix?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Include the existing test files — or an index of covered scenarios — in the generation context so new tests target gaps instead of duplicates.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Add the instruction "Never write a test that duplicates existing coverage" to the generation prompt.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Run a post-generation dedup step that similarity-matches every new test against the existing suite and quietly drops the near-copies it finds.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Restrict generation to source files that have no test file sitting next to them.</button>
+</div>
+
+<!-- Q15 -->
+<div class="qcard" data-ans="3">
+  <div class="qnum">Question 15</div>
+  <div class="stem">The nightly dependency audit runs as one Message Batches job across 140 service repos, each request carrying its own custom_id. Last night 131 requests completed; 9 failed validation because their audit payloads exceeded the input limit. What is the correct recovery?</div>
+  <button class="opt" data-j="0"><span class="L">A.</span>Resubmit all 140 requests tonight with the audit prompt shortened across the board, so every payload fits under the limit this time.</button>
+  <button class="opt" data-j="1"><span class="L">B.</span>Move the nightly audit to real-time requests so input-limit failures surface immediately.</button>
+  <button class="opt" data-j="2"><span class="L">C.</span>Drop the 9 failed repos from the audit scope and list them as unverified in the morning report.</button>
+  <button class="opt" data-j="3"><span class="L">D.</span>Resubmit only the 9 failed requests — identified by custom_id — with payloads modified, for example chunked per-repo manifests, keeping the 131 completed results.</button>
+</div>
+
+<div id="results">
+  <h2 id="rline"></h2>
+  <div class="band" id="rband"></div>
+  <div class="band mut">Multiple-response items are scored all-or-nothing — exactly like selecting the stated number on exam day.</div>
+  <button class="again" onclick="location.reload()">Reset quiz</button>
+</div>
+
+<footer>PeaceOfCode · Claude Certified Architect Foundations course · Unofficial practice questions — not affiliated with Anthropic</footer>
+
+</div>
+
+<script>
+(function(){
+var cards=[].slice.call(document.querySelectorAll('.qcard'));
+var total=cards.length,answered=0,correct=0;
+document.getElementById('loadinfo').textContent=total+' / 15 questions loaded';
+document.getElementById('prog').textContent='Answered 0 / '+total;
+function bar(){document.getElementById('prog').textContent='Answered '+answered+' / '+total;document.getElementById('score').textContent='Score '+correct}
+function fin(){if(answered===total){var r=document.getElementById('results');r.style.display='block';document.getElementById('rline').textContent='You scored '+correct+' / '+total;
+var b;if(correct>=13)b='Exam-ready on this block — you are thinking like a pipeline architect.';else if(correct>=10)b='Close — replay your misses and name the trap that caught you.';else b='Revise Ep 12 and Ep 13 first, rest a day, then rerun this block cold.';
+document.getElementById('rband').textContent=b;r.scrollIntoView({behavior:'smooth'})}}
+cards.forEach(function(c){
+var ans=c.getAttribute('data-ans').split(',').map(Number);
+var opts=[].slice.call(c.querySelectorAll('.opt'));
+var isMR=c.classList.contains('mr');
+if(!isMR){
+ opts.forEach(function(b){b.addEventListener('click',function(){
+  if(c.getAttribute('data-done'))return;c.setAttribute('data-done','1');answered++;
+  var j=+b.getAttribute('data-j');
+  opts.forEach(function(x){x.disabled=true;var k=+x.getAttribute('data-j');if(ans.indexOf(k)>-1)x.classList.add('right')});
+  if(ans.indexOf(j)>-1){correct++;b.classList.add('right')}else{b.classList.add('wrong')}
+  bar();fin();
+ })});
+}else{
+ var chk=c.querySelector('.check'),v=c.querySelector('.verdict'),sel=[];
+ opts.forEach(function(b){b.addEventListener('click',function(){
+  if(c.getAttribute('data-done'))return;
+  var j=+b.getAttribute('data-j'),ix=sel.indexOf(j);
+  if(ix>-1){sel.splice(ix,1);b.classList.remove('picked')}
+  else if(sel.length<2){sel.push(j);b.classList.add('picked')}
+  chk.disabled=(sel.length!==2);
+ })});
+ chk.addEventListener('click',function(){
+  if(c.getAttribute('data-done')||sel.length!==2)return;c.setAttribute('data-done','1');answered++;
+  var win=ans.every(function(a){return sel.indexOf(a)>-1});
+  opts.forEach(function(x){x.disabled=true;var k=+x.getAttribute('data-j');
+   if(ans.indexOf(k)>-1)x.classList.add('right');else if(sel.indexOf(k)>-1)x.classList.add('wrong');
+   x.classList.remove('picked')});
+  if(win){correct++;v.textContent='Correct — both selected answers match.';v.className='verdict ok'}
+  else{v.textContent='Not quite — the correct pair is highlighted in green.';v.className='verdict no'}
+  bar();fin();
+ });
+}
+});
+})();
+</script>
+</body>
+</html>
